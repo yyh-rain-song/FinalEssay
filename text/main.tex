@@ -217,6 +217,80 @@ This means that it tends to create a tangent discontinuity
 at this point. The smoothing effect with the help of the
 inflation force then removes the discontinuity and the
 curve passes through the edge.
+
+\section{Active contour without edges}
+However, the snake models metioned above all rely on the edge-function, and depends on the image gradient $\nabla I$, to stop the curve evolution, these models can detect only objects with edges defined by gradient. In practice, the discrete gradients are bounded and then the stopping function is never zero on the edges, and the curve may pass through the boundary. What's more, if the image is very noisy, then  the isotropic smoothing Gaussian has to be strong, which will smooth the edges too.
+
+To fix this problem, Chan\cite{ne} propose a different active contour model, without a stopping edge-function, i.e. a model which is not based on the gradient of the image for the stopping process. The stopping term is based on Mumford–Shah segmentation techniques \cite{ne18}. In this way, we obtain a model which can detect contours both with or without gradient, for instance objects with very smooth boundaries or even with discontinuous boundaries.
+
+\subsection{Model description}
+Define the evolving curve $C$ in $\Omega$, as the boundary of an open subset $\omega$ of $\Omega$(i.e. $\omega\in\Omega, C=\partial\omega$). Thus, $inside(C)$ denootes the region $\omega$ and $outside(C)$ denotes the region $\Omega\backslash\bar{\omega}$.
+
+The model introduce the energy function $F(c_1,c_2,C)$ defined bt:
+\begin{equation}\begin{aligned}
+    F\left(c_{1}, c_{2}, C\right)&= \mu \cdot \text { Length }(C)+\nu \cdot \operatorname{Area}(i n \operatorname{side}(C)) \\
+    &+\lambda_{1} \int_{\text {inside }(C)}\left|u_{0}(x, y)-c_{1}\right|^{2} d x d y \\
+    &+\lambda_{2} \int_{\text {outside }(C)}\left|u_{0}(x, y)-c_{2}\right|^{2} d x d y,
+\end{aligned}\end{equation}
+where $\mu\geq 0, \nu\geq 0, \lambda_1,\lambda_2>0$ are fixed parameters. The following introdution fix $\lambda_1=\lambda_2=1$ and $\nu=0$.
+\subsection{Level set formulation of the model}
+In the level set method\cite{ne19}, $C\in\Omega$ is represented by the zero level set of a Lipschitz function $\phi:\Omega\to\mathcal{R}$ such that:
+\begin{equation}
+  \left\{\begin{array}{l}
+  C=\partial \omega=\{(x, y) \in \Omega: \phi(x, y)=0\} \\
+  \text { inside }(C)=\omega=\{(x, y) \in \Omega: \phi(x, y)>0\} \\
+  \text { outside }(C)=\Omega \backslash \bar{\omega}=\{(x, y) \in \Omega: \phi(x, y)<0\}
+  \end{array}\right.
+\end{equation}
+Using the Heaviside function $H$ and the one-dimensional Dirac measure $\delta_0$ defined respectively by
+\begin{equation}
+  H(z)=\left\{\begin{array}{ll}
+  1, & \text { if } z \geq 0 \\
+  0, & \text { if } z<0,
+  \end{array} \quad \delta_{0}(z)=\frac{d}{d z} H(z)\right.
+\end{equation}
+the term of energy $F$ can be expressed in the following way:
+\begin{equation}
+  \begin{aligned}
+  \text { Length }\{\phi=0\} &=\int_{\Omega}|\nabla H(\phi(x, y))| d x d y \\
+  &=\int_{\Omega} \delta_{0}(\phi(x, y))|\nabla \phi(x, y)| d x d y, \\
+  \text { Area }\{\phi \geq 0\} &=\int_{\Omega} H(\phi(x, y)) d x d y,
+  \end{aligned}
+\end{equation}
+and
+\begin{equation}
+  \begin{aligned}
+  &\int_{\phi>0}\left|u_{0}(x, y)-c_{1}\right|^{2} d x d y \\
+  &\quad=\int_{\Omega}\left|u_{0}(x, y)-c_{1}\right|^{2} H(\phi(x, y)) d x d y \\
+  &\int_{\phi<0}\left|u_{0}(x, y)-c_{2}\right|^{2} d x d y \\
+  &\quad=\int_{\Omega}\left|u_{0}(x, y)-c_{2}\right|^{2}(1-H(\phi(x, y))) d x d y .
+  \end{aligned}
+\end{equation}
+Then, the energy $F(c_1,c_2,\phi)$ can be written as:
+\begin{equation}
+  \begin{aligned}
+  F\left(c_{1},\right.&\left.c_{2}, \phi\right) \\
+  =& \mu \int_{\Omega} \delta(\phi(x, y))|\nabla \phi(x, y)| d x d y \\
+  &+\nu \int_{\Omega} H(\phi(x, y)) d x d y \\
+  &+\lambda_{1} \int_{\Omega}\left|u_{0}(x, y)-c_{1}\right|^{2} H(\phi(x, y)) d x d y \\
+  &+\lambda_{2} \int_{\Omega}\left|u_{0}(x, y)-c_{2}\right|^{2}(1-H(\phi(x, y))) d x d y
+  \end{aligned}
+\end{equation}
+Keeping $\phi$ fixed and minimizing the energy $F(c_1,c_2,\phi)$ with respect to the constants $c_1$ and $c_2$, it is easy to express these constants function of $\phi$ by:
+\begin{equation}
+  c_{1}(\phi)=\frac{\int_{\Omega} u_{0}(x, y) H(\phi(x, y)) d x d y}{\int_{\Omega} H(\phi(x, y)) d x d y}
+\end{equation} 
+If $\int_\Omega H(\phi(x,y))d x d y >0$ then:
+\begin{equation}
+  c_{2}(\phi)=\frac{\int_{\Omega} u_{0}(x, y)(1-H(\phi(x, y))) d x d y}{\int_{\Omega}(1-H(\phi(x, y))) d x d y}
+\end{equation}
+IF $\int_\Omega(1-H(\phi(x,y)))d x d y>0$ (i.e. if the curve has a nonempty exterior in $\Omega$). For the corresponding ``degenerate'' cases, there are no constrains on the value of $c_1$ and $c_2$. Then, $c_1$ and $c_2$ are in fact given by:
+\begin{equation}
+  \left\{\begin{array}{l}
+  c_{1}(\phi)=\operatorname{average}\left(u_{0}\right) \text { in }\{\phi \geq 0\} \\
+  c_{2}(\phi)=\operatorname{average}\left(u_{0}\right) \text { in }\{\phi<0\}
+  \end{array}\right.
+\end{equation}
 \section{Conclusion}
 The conclusion goes here.\cite{han2020survey}
 
