@@ -1,34 +1,34 @@
 \documentclass[journal]{IEEEtran}
-\usepackage{cite}
+\usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{algorithmic}
-\usepackage{array}
-
-% *** SUBFIGURE PACKAGES ***
 \ifCLASSOPTIONcompsoc
- \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage[caption=false, font=normalsize, labelfont=sf, textfont=sf]{subfig}
 \else
- \usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage[caption=false, font=footnotesize]{subfig}
 \fi
 
-% correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-
 \begin{document}
-\title{A survey on vision transformer}
 
-\author{Yuhuan Yang,~\IEEEmembership{MedianBrainGroup,STJU,}}
+\title{A survey on different active contour models}
+
+\author{Yuhuan Yang, 021034910019,~\IEEEmembership{MediaBrain Group, SJTU}
+}
 
 \maketitle
 
+% As a general rule, do not put math, special symbols, or citations
+% in the abstract or keywords.
 \begin{abstract}
-The abstract goes here.
+Active contour model can be used in image segmentation and understanding as well as dynamic or 3d image analysis. The active contour model, also known as the snake, is defined as an energy-minimizing spline guided by external constraint forces and also influenced by image forces that pull it toward features such as lines and edges. Snake is an algorithm which rely on other mechanisms such as interacting with the user or some higher-level image understanding and processing methods, or using information from adjacent image data in frequency or space domain. These interaction specify an estimated shape and starting position for snake, usually near the desired contour. Using these prior information, snake can evolve itself and move towards the appropriate solution. In this survey we take a brief look at different snake models and their developement.
 \end{abstract}
 
+% Note that keywords are not normally used for peer-review papers.
 \begin{IEEEkeywords}
-IEEE, IEEEtran, journal, \LaTeX, paper, template.
+active contour, energy minimization,  partial differential equations, segmentation
 \end{IEEEkeywords}
+
 
 \IEEEpeerreviewmaketitle
 
@@ -94,56 +94,6 @@ and the equation \ref{eq3} can be soved by matrix inversion:
 \mathbf{y_t}=(\mathbf{A}+\gamma\mathbf{I})^{-1}(\mathbf{y_{t-1}-f_y(x_{t-1},y_{t-1})})\label{eq5}
 \end{aligned}\end{equation}
 
-\section{Introduction}
-
-\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
-for IEEE journal papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
-
-\subsection{Subsection Heading Here}
-Subsection text here.
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
-
-
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
-
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-
-\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-\caption{An Example of a Table}
-\label{table_example}
-\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-\begin{tabular}{|c||c|}
-\hline
-One & Two\\
-\hline
-Three & Four\\
-\hline
-\end{tabular}
-\end{table}
 \subsection{Image forces}
 In order to make snakes useful for early vision we need energy functions that attract them to salient features in image. Generally, the image energy functions should attract a snake to lines, edges, and terminations. The total image energy can be expressed as a weighted combination of the three terms:
 \begin{equation}\begin{aligned}
@@ -407,8 +357,20 @@ However, the key drawbacks of the traditional snakes are
   \item Their accuracy depends on the convergence policy.\cite{w2}
 \end{itemize}
 
-% Can use something like this to put references on a page
-% by themselves when using endfloat and the captionsoff option.
+% \appendices
+% \section{Proof of the First Zonklar Equation}
+% Appendix one text goes here.
+
+
+% \section{}
+% Appendix two text goes here.
+
+
+% \section*{Acknowledgment}
+
+
+% The authors would like to thank...
+
 \ifCLASSOPTIONcaptionsoff
   \newpage
 \fi
