@@ -39,6 +39,60 @@ A snake is an energy minimizing, deformable spline influenced by constraint and 
 
 Snakes do not solve the entire problem of finding contours in images, since the method requires knowledge of the desired contour shape beforehand. Rather, they depend on other mechanisms such as interaction with a user, interaction with some higher level image understanding process, or information from image data adjacent in time or space.
 
+\section{Snakes model}
+The snake model was first introduced in 1988 by Kass\cite{snake}. The basic idea of this paper is define snake model as a \textit{controlled continuity}\cite{s18} spline under the influence of image forces and external constraint forces. Representing the position of a snake parametrically by $\mathbf{v}(s)=(x(s),y(s))$, the energy function of snake model can be written as:
+\begin{equation}\begin{aligned}
+E_{\text{snake}}=&\int_0^1 E_{\text{snake}}(\mathbf{v}(s))ds\\
+=&\int_0^1 E_{\text{int}}(\mathbf{v}(s))+E_{\text{image}}(\mathbf{v}(s))\\
+&+E_{\text{con}}(\mathbf{v}(s))ds,\label{eq1}
+\end{aligned}\end{equation}
+where $E_{\text{int}}$ represents the internal energy of the spline due to bending, $E_{\text{image}}$ gives rise to the image forces, and $E_{\text{con}}$ represents the external constraint forces. In the following section, we introduce all of the three energy in detail.
+\subsection{Internal Energy}
+The internal spline energy can be written as:
+\begin{equation}\begin{aligned}
+E_{\text{int}}=(\alpha(s)\|\mathbf{v}'(s)\|^2+\beta(s)\|\mathbf{v}''(s)\|^2).
+\end{aligned}\end{equation}
+The internal part of spline energy is composed of a first-order term comtrolled by $\alpha(s)$ and a second-order term controlled by $\beta(s)$. The first-order term makes the snake act like a membrane, and the second-order term makes it act like a thing plate. By adjusting the weight of $\alpha(s)$ and $\beta(s)$, we can control the relative importance of the membrane and thin-plate terms.
+\subsection{Detailed minimizing procedure}
+When $\alpha(s)$ and $\beta(s)$ are constants, minimizing the energy function\ref{eq1} gives rise to the following two independent Euler equations:
+\begin{equation}\begin{aligned}
+\alpha x''+\beta x''''+\frac{\partial E_{\text{ext}}}{\partial x}=0\\
+\alpha y''+\beta y''''+\frac{\partial E_{\text{ext}}}{\partial x}=0
+\end{aligned}\end{equation} 
+When $\alpha(s)$ and $\beta(s)$ are not constant, is's simpler to go directly to a discrete formulation as:
+\begin{equation}\begin{aligned}
+E_{\text{snake}}=\sum_{i=1}^n E_{\text{int}}(i)+E_{\text{ext}}(i)
+\end{aligned}\end{equation}
+Approximating the derivatives with finite differences and converting to vector notation with $\mathbf{v}_i=(x_i,y_i)=(x(ih),y(ih))$, we have:
+\begin{equation}\begin{aligned}
+E_{\text{int}}(i)=&\alpha_i |\mathbf{v}_i-\mathbf{v}_{i-1}|^2/2h^2\\
+&+\beta_i|\mathbf{v}_{i-1}-2\mathbf{v}_i+\mathbf{v}_{i+1}|^2/2h^4.
+\end{aligned}\end{equation}
+Let $f_x(i)=\frac{\partial E_{\text{ext}}}{\partial x_i}$ and $f_y(i)=\frac{\partial E_{\text{ext}}}{\partial y_i}$, the corresponding Euler equation becomes:
+\begin{equation}\begin{aligned}
+    \alpha_{i}\left(\mathbf{v}_{i}-\mathbf{v}_{i-1}\right)&- \alpha_{i+1}\left(\mathbf{v}_{i+1}-\mathbf{v}_{i}\right) \\
+    &+\beta_{i-1}\left[\mathbf{v}_{i-2}-2 \mathbf{v}_{i-1}+\mathbf{v}_{i}\right] \\
+    &-2 \beta_{i}\left[\mathbf{v}_{i-1}-2 \mathbf{v}_{i}+\mathbf{v}_{i+1}\right] \\
+    &+\beta_{i+1}\left[\mathbf{v}_{i}-2 \mathbf{v}_{i+1}+\mathbf{v}_{i+2}\right] \\
+    &+\left(f_{x}(i), f_{y}(i)\right)=0
+\end{aligned}\end{equation}
+The above Euler equations can be written in matrix form as:
+\begin{equation}\begin{aligned}
+\mathbf{Ax+f_x(x,y)}=0\\
+\mathbf{Ay+f_y(x,y)}=0 \label{eq2}
+\end{aligned}\end{equation}
+where $A$ is a pentadiagonal banded matrix.
+
+The equation \ref{eq2} can be rewrite in the format of time derivative as:
+\begin{equation}\begin{aligned}
+  \mathbf{Ax_t+f_x(x_{t-1},y_{t-1})}=-\gamma(\mathbf{x_t-x_{t-1}})\\
+  \mathbf{Ay_t+f_y(x_{t-1},y_{t-1})}=-\gamma(\mathbf{y_t-y_{t-1}}) \label{eq3}
+\end{aligned}\end{equation}
+and the equation \ref{eq3} can be soved by matrix inversion:
+\begin{equation}\begin{aligned}
+\mathbf{x_t}=(\mathbf{A}+\gamma\mathbf{I})^{-1}(\mathbf{x_{t-1}-f_x(x_{t-1},y_{t-1})})\\
+\mathbf{y_t}=(\mathbf{A}+\gamma\mathbf{I})^{-1}(\mathbf{y_{t-1}-f_y(x_{t-1},y_{t-1})})\label{eq5}
+\end{aligned}\end{equation}
 
 \section{Introduction}
 
