@@ -291,6 +291,30 @@ IF $\int_\Omega(1-H(\phi(x,y)))d x d y>0$ (i.e. if the curve has a nonempty exte
   c_{2}(\phi)=\operatorname{average}\left(u_{0}\right) \text { in }\{\phi<0\}
   \end{array}\right.
 \end{equation}
+
+\subsection{Numerical approximation}
+In order to compute the associated Euler-Langrange equation for the unknown function $\phi$, we consider slightly regularized versions of the functions $H$ and $\delta_0$, denotes as $H_\epsilon$ and $\delta_\epsilon$ as $\epsilon\to 0$. Let $H_\epsilon$ beany $C^2(\hat{\Omega})$ regularization of $H$ and $\delta_\epsilon=H_\epsilon'$, The associated regulaized energy function can be expressed as $F_\epsilon$.
+
+Keeping $c_1$ and $c_2$ fixed, and minimizing $F_\epsilon$ with respect to $\phi$, we deduce the associated Euler-Langrange equattion for $\phi$. Parameterizing the descent direction by an artificial time $t\geq 0$, the equation in $\phi(t,x,y)$(with $\phi(0,x,y)=\phi_0(x,y)$ defining the initial contour) is:
+\begin{equation}\begin{aligned}
+    \frac{\partial \phi}{\partial t}=\delta_{\varepsilon}(\phi) &\left[\mu \operatorname{div}\left(\frac{\nabla \phi}{|\nabla \phi|}\right)-\nu-\lambda_{1}\left(u_{0}-c_{1}\right)^{2}\right.\\
+    &\left.+\lambda_{2}\left(u_{0}-c_{2}\right)^{2}\right]=0 \text { in }(0, \infty) \times \Omega, \\
+    & \phi(0, x, y)=\phi_{0}(x, y) \text { in } \Omega, \\
+    & \frac{\delta_{\varepsilon}(\phi)}{|\nabla \phi|} \frac{\partial \phi}{\partial \vec{n}}=0 \text { on } \partial \Omega.
+\end{aligned}\end{equation}
+where $\vec{n}$ denotes the exterior normal to the boundary $\partial\Omega$, and $\partial\phi/\partial\vec{n}$ denotes the normal derivative of $\phi$ at the boundary.
+
+And two possible regularization of $H$ by $C^2(\bar{\Omega})$ functions are:
+\begin{equation}
+  H_{1, \varepsilon}(z)=\left\{\begin{array}{l}
+  1 \text { if } z>\varepsilon \\
+  0 \text { if } z<-\varepsilon \\
+  \frac{1}{2}\left[1+\frac{z}{\varepsilon}+\frac{1}{\pi} \sin \left(\frac{\pi z}{\varepsilon}\right)\right] \text { if }|z| \leq \varepsilon
+  \end{array}\right.
+\end{equation}
+\begin{equation}
+  H_{2, \varepsilon}(z)=\frac{1}{2}\left(1+\frac{2}{\pi} \arctan \left(\frac{z}{\varepsilon}\right)\right) .
+\end{equation}
 \section{Conclusion}
 The conclusion goes here.\cite{han2020survey}
 
