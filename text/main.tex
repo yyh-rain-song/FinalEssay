@@ -390,7 +390,22 @@ Finally, we combine all three terms from the prediction of internet and get the 
   \end{aligned}
 \end{equation}
 \section{Conclusion}
-The conclusion goes here.\cite{han2020survey}
+In computer vision, contour models describe the boundaries of shapes in an image. Snakes in particular are designed to solve problems where the approximate shape of the boundary is known. By being a deformable model, snakes can adapt to differences and noise in stereo matching and motion tracking. Additionally, the method can find Illusory contours in the image by ignoring missing boundary information.
+
+Compared to classical feature extraction techniques, snakes have multiple advantages:
+\begin{itemize}
+  \item They autonomously and adaptively search for the minimum state.
+  \item External image forces act upon the snake in an intuitive manner.
+  \item Incorporating Gaussian smoothing in the image energy function introduces scale sensitivity.
+  \item They can be used to track dynamic objects.
+\end{itemize}
+
+However, the key drawbacks of the traditional snakes are
+\begin{itemize}
+  \item They are sensitive to local minima states, which can be counteracted by simulated annealing techniques.
+  \item Minute features are often ignored during energy minimization over the entire contour.
+  \item Their accuracy depends on the convergence policy.\cite{w2}
+\end{itemize}
 
 % Can use something like this to put references on a page
 % by themselves when using endfloat and the captionsoff option.
