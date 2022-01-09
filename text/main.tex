@@ -176,6 +176,47 @@ In order to find terminations of line segments and corners, we use the curvature
     &=\frac{C_{y y} C_{x}^{2}-2 C_{x y} C_{x} C_{y}+C_{x x} C_{y}^{2}}{\left(C_{x}^{2}+C_{y}^{2}\right)^{3 / 2}}
 \end{aligned}\end{equation}
 
+\section{Snake with bolloon force}
+The snake model achieves great success in image segmentation and recognition, however, it has some weaknesses that should not be ignored. The original sname, when note closed enough to contours, is not attracted by them and straightens to a line. Thus, in 1989, Cohen\cite{balloon} pointed out the weakness of original snake model, and came up with a new format of external force which makes the curve behave like a balloon. The initial curve need no longer to be close to the solution to converge, it can inflate by an additional force, pass over weak edges and be stopped only if the edge is strong.
+
+\subsection{The Instability of original smake model}
+The most used format of external force for snake model is the edge function defined as equation \ref{eq4}. We define the potential of shape as $\int_0^1 P(v(s))ds$ where:
+\begin{equation}\begin{aligned}
+P(v)=E_{\text{edge}}=-|\nabla I(v)|^2.\notag
+\end{aligned}\end{equation}
+The equation \ref{eq5} can be rewrite as:
+\begin{equation}\begin{aligned}
+(I+\gamma A)v_t=(v_{t-1}+\gamma F(v_{t-1})).\label{eq6}
+\end{aligned}\end{equation}
+where $F=-\nabla P$ is the external force.
+
+However, even though the initial guess can be close to an edge, instabilities can occur due to the discretization of the evolution problem. We can see from equation \ref{eq6} that, the position at time $t, v_t$ is obtained after moving $v_{t-1}$ alone vector $\gamma F(v_{t-1})$ and then solving the system. This leads to the following remarks:
+\paragraph{Time Discretization} If $\gamma F(v_{t-1})$ is too large the point $v_{t-1}$ can be moved too far across the desired minimum and never come back. So the curve can pass through the dege and then make large oscillations without reaching equilibrium, or stabilize to a different minimum.
+
+This problem can be solved to choose time step $\gamma$ small enough such that move $\gamma F(v_{t-1})$ is never too large. However, only very few high gradient points will attract the curve and small $F$ will not affect much the curve, since they are too small compared with the internal forces. Thus, instead of acting on the time step, bolloon model modify the force by normalizing it, taking $F=-k\frac{\partial P}{\|\partial P\|}$ where $k$ is mannually chosen that $k\gamma$ is on the order of the pixel size.
+
+\paragraph{Space Discretization}The force F is known only on a discrete grid corresponding to the image, and therefore, there can be a zero-crossing without any zero in the grid. This problem is simply solved by bilinear interpolation of F at a noninteger positions.
+
+\subsection{The bollon force}
+To make the snake find its way, an initial guess of the contour has to be provided manually. This has many consequences for the evolution of the curve:
+\begin{itemize}
+  \item If the curve is not close enough to an edge, it is not attracted by it.
+  \item If the curve is not submitted by any forces, it shrinks on itself.
+\end{itemize}
+To fix this problem, from an initial oriented curve, a new force is added as a pressure pushing outside as if we introduced air inside. The modified format of F now becomes:
+\begin{equation}\begin{aligned}
+F=k_1\mathbf{n}(s)-k\frac{\nabla P}{\|\nabla P\|}
+\end{aligned}\end{equation}
+where $\mathbf{n}(s)$ is the normal unitary vector to the curve at point $v(s)$ and $k_1$ is the amplitude of this force. If we
+change the sign of $k_1$ or the orientation of the curve, it will
+have an effect of deflation instead of inflation. $k_1$, and $k$ are chosen such that they are of the same order, which is
+smaller than a pixel size, and $k$ is slightly larger than $k_1$ so an edge point can stop the inflation force. The curve then
+expands and it is attracted and stopped by edges as before. But since there is a pressure force, if the edge is too
+weak the curve can pass through this edge if it is a singularity with regard to the rest of the curve being inflated.
+This means that it tends to create a tangent discontinuity
+at this point. The smoothing effect with the help of the
+inflation force then removes the discontinuity and the
+curve passes through the edge.
 \section{Conclusion}
 The conclusion goes here.\cite{han2020survey}
 
