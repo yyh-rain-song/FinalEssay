@@ -315,6 +315,38 @@ And two possible regularization of $H$ by $C^2(\bar{\Omega})$ functions are:
 \begin{equation}
   H_{2, \varepsilon}(z)=\frac{1}{2}\left(1+\frac{2}{\pi} \arctan \left(\frac{z}{\varepsilon}\right)\right) .
 \end{equation}
+
+\section{Deep snake models}
+In recent years, with the increasing popularity of deep learning, the combination of serpentine model and deep neural network has also produced impressive results.
+\subsection{Level set regression}
+In deep learning, image segmentation is often considered as a pixel-wise classification task. However, with the definition of level set, it's easily transformed into a level-set regression task, which facilitates learning. \cite{gsnake} proposes a level set function regression network supervised by the segmentation ground truth and geodesic active contours. With the help of geodesic active contours, the segmentation contour, embedded in the level set function, can be globally driven towards the image boundary to obtain lower energy, and the geodesic constraint can lead the segmentation result to have fewer outliers. 
+
+\subsubsection{Method}
+Firstly, the author define an image edge indicator function $g_I$ as :
+\begin{equation}
+  g_{I}=\frac{1}{1+\left|\nabla G_{\sigma} * I\right|^{2}}
+\end{equation}
+and the energy function $E(\phi)$ is defined by:
+\begin{equation}
+  E(\phi)=\int_{\Omega} g_{I} \delta_{\epsilon}(\phi)|\nabla \phi| d x
+\end{equation}
+where:
+\begin{equation}
+  \delta_{\epsilon}=\frac{\epsilon}{\pi\left(\phi^{2}+\epsilon^{2}\right)}
+\end{equation}
+The network architecture for this method is designed as a multi-head structure, with one branch predicting the probability map for final segmentation class, and supervised by ground truth using dice loss:
+\begin{equation}
+  L_{\text {Dice }}=1-\frac{2 \sum_{i=1}^{N} s_{i} g_{i}}{\sum_{i=1}^{N} s_{i}^{2}+\sum_{i=1}^{N} g_{i}^{2}}
+\end{equation}
+and the second branch optimized by minimizing the energy function $E(\phi)$, the last branch supervised by the level set. The whole pipeline is shown in Fig. \ref{fig:gseg}.
+
+\begin{figure}[htp] 
+	\centering
+	\includegraphics[width=1\linewidth]{../imgs/gseg.png}%
+	%\vspace{-1em}
+	\caption{The pipeline of the training and inference structure in \cite{gsnake}}
+	\label{fig:gseg}
+\end{figure}
 \section{Conclusion}
 The conclusion goes here.\cite{han2020survey}
 
